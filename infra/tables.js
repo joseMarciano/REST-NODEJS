@@ -3,7 +3,8 @@ class Tabelas {
         this._connection = connection;
         console.log('init')
         return Promise.all([
-            Tabelas._criarAtendimentos()
+            Tabelas._criarAtendimentos(),
+            Tabelas._criarPets()
         ]);
     }
 
@@ -21,6 +22,28 @@ class Tabelas {
                 PRIMARY KEY(ID)
             )
         
+        `;
+
+        return new Promise((resolve, reject) => {
+            this._connection.query(sql,(error,results,fields) =>{
+                if(error){
+                    console.log(error.stack)
+                    reject(error);
+                    return;
+                }
+                resolve(results,fields)
+            });
+        }) 
+    }
+
+    static _criarPets() {
+        const sql = `
+        CREATE TABLE IF NOT EXISTS PETS (
+            ID BIGINT NOT NULL AUTO_INCREMENT,
+            NOME VARCHAR(50),
+            IMAGEM VARCHAR(200),
+            PRIMARY KEY (ID)
+        );
         `;
 
         return new Promise((resolve, reject) => {
